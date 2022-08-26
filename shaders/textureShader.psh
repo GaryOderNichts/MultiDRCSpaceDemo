@@ -1,0 +1,38 @@
+; $MODE = "UniformRegister"
+
+; $NUM_SPI_PS_INPUT_CNTL = 1
+; vTexCoord R0
+; $SPI_PS_INPUT_CNTL[0].SEMANTIC = 0
+; $SPI_PS_INPUT_CNTL[0].DEFAULT_VAL = 1
+
+; C0
+; $UNIFORM_VARS[0].name = "uColor"
+; $UNIFORM_VARS[0].type = "vec4"
+; $UNIFORM_VARS[0].count = 1
+; $UNIFORM_VARS[0].block = -1
+; $UNIFORM_VARS[0].offset = 0
+; C1
+; $UNIFORM_VARS[1].name = "uTexCoordParams"
+; $UNIFORM_VARS[1].type = "vec4"
+; $UNIFORM_VARS[1].count = 1
+; $UNIFORM_VARS[1].block = -1
+; $UNIFORM_VARS[1].offset = 4
+
+; $SAMPLER_VARS[0].name = "uTexture"
+; $SAMPLER_VARS[0].type = "SAMPLER2D"
+; $SAMPLER_VARS[0].location = 0
+
+00 ALU: ADDR(32) CNT(4)
+    0  x: ADD R0.x, R0.x, C1.x
+       y: ADD R0.y, R0.y, C1.y
+    1  x: MUL R0.x, R0.x, C1.z
+       y: MUL R0.y, R0.y, C1.w
+01 TEX: ADDR(48) CNT(1) VALID_PIX
+    2  SAMPLE R0, R0.xy0x, t0, s0
+02 ALU: ADDR(36) CNT(4)
+    3  x: MUL R0.x, R0.x, C0.x
+       y: MUL R0.y, R0.y, C0.y
+       z: MUL R0.z, R0.z, C0.z
+       w: MUL R0.w, R0.w, C0.w
+03 EXP_DONE: PIX0, R0
+END_OF_PROGRAM
